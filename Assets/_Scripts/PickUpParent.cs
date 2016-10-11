@@ -82,6 +82,15 @@ public class PickUpParent : MonoBehaviour {
 
     }
 
+    void OnTriggerEnter(Collider col){
+        Debug.Log("You have collided with " + col.name);
+        // for (float i = 0; i < 2f; i += Time.deltaTime){
+        //     device.TriggerHapticPulse();
+        // }
+         device.TriggerHapticPulse();
+       
+
+    }
     void tossObject(Rigidbody rigidbody)
     {
         Transform origin = trackedObj.origin ? trackedObj.origin : trackedObj.transform.parent;
