@@ -5,6 +5,7 @@ using System;
 [RequireComponent(typeof(SteamVR_TrackedObject))]
 public class PickUpParent : MonoBehaviour {
 
+    
     SteamVR_TrackedObject trackedObj;
     SteamVR_Controller.Device device;
     public GameObject prefabSphere;
