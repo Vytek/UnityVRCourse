@@ -10,6 +10,16 @@ public class PickUpParent : MonoBehaviour {
     SteamVR_Controller.Device device;
     public GameObject prefabSphere;
    
+    [Space(10)]
+    [Header("Haptics")]
+    [Space(5)]
+    [Range(0, 5)]
+    public int pulseCount;
+    [Range(0.0f, 5.0f)]
+    public float pulseLength;
+    [Range(0.0f, 5.0f)]
+    public float pauseLength;
+
 
 	void Awake () {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
@@ -82,15 +92,32 @@ public class PickUpParent : MonoBehaviour {
 
     }
 
-    void OnTriggerEnter(Collider col){
+    void OnTriggerEnter(Collider col)
+    {
         Debug.Log("You have collided with " + col.name);
-        // for (float i = 0; i < 2f; i += Time.deltaTime){
-        //     device.TriggerHapticPulse();
-        // }
-         device.TriggerHapticPulse();
-       
+        //StartCoroutine(HapticSinglePulse(2f));
+       StartCoroutine(HapticPatternPulse(pulseCount, pulseLength, pauseLength));
 
     }
+
+    IEnumerator HapticSinglePulse(float length)
+    {
+        for (float i = 0; i < length; i += Time.deltaTime)
+        {
+            device.TriggerHapticPulse();
+            yield return null;
+        }
+    }
+    
+    IEnumerator HapticPatternPulse(int pulseCount, float pulseLength, float pauseLength)
+    {
+        for (float i = 0; i < pulseCount; i++)
+        {
+            yield return StartCoroutine(HapticSinglePulse(pulseLength));
+            yield return new WaitForSeconds(pauseLength);
+        }
+    }
+
     void tossObject(Rigidbody rigidbody)
     {
         Transform origin = trackedObj.origin ? trackedObj.origin : trackedObj.transform.parent;
